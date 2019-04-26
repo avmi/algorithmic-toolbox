@@ -4,22 +4,30 @@ import sys
 
 
 def compute_min_refills(distance, tank, stops):
-    min, prev, next = 0, 0, 0
+    if distance <= tank:
+        return 0
 
-    stops.insert(0, 0)
-    stops.append(distance)
+    start = 0
+    refuels = 0
 
-    while next < len(stops):
-        if stops[next] - stops[prev] < tank:
-            next += 1
+    for i in range(len(stops)):
+        stop = False
+
+        while stops[i] - start <= tank:
+            i += 1
+            stop = True
+            if i == len(stops):
+                break
+
+        if stop:
+            start = stops[i-1]
+            refuels += 1
+            if start + tank >= distance:
+                return refuels
         else:
-            if next == prev + 1:
-                return -1
-            else:
-                min += 1
-                prev = next - 1
+            return -1
 
-    return min
+    return -1
 
 
 if __name__ == '__main__':
