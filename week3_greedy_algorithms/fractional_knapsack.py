@@ -2,16 +2,17 @@
 import sys
 
 def loot(capacity, weights, values):
-    value = 0.
-    new_list = list(map(lambda v,w : v/w, values, weights))
-    wmap = dict(zip(new_list,weights))
-    for item in sorted(new_list, reverse=True):
-        total = item * wmap[item],
-        if capacity > wmap[item]:
-            capacity -= wmap[item]
-            value += total
+    value = 0
+    pairs = sorted(list(zip(weights, values)), key = lambda x:x[1]/x[0], reverse=True)
+
+    for (w, v) in pairs:
+        if capacity - w >= 0:
+            value += v
+            capacity -= w
         else:
-            value += capacity*item
+            value += (v / w) * capacity
+            capacity = 0
+        if not capacity:
             break
 
     return value
