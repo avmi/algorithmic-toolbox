@@ -1,7 +1,7 @@
 # Uses python3
+from __future__ import print_function
 import sys
 import random
-from __future__ import print_function
 
 
 def partition3(a, l, r):

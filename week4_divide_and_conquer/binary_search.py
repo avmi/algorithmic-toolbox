@@ -1,7 +1,7 @@
 # Uses python3
+from __future__ import print_function
 import math
 import sys
-from __future__ import print_function
 
 
 def binary_search(a, x):
