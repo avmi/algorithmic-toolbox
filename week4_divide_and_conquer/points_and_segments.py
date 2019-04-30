@@ -1,27 +1,28 @@
 # Uses python3
-from __future__ import print_function
-from itertools import chain
 import sys
 
 
 def count_segments(starts, ends, points):
     cnt = [0] * len(points)
+    points_num = [i for _, i in sorted(zip(points, range(len(points))))]
 
-    st = zip(starts, ["l"] * len(starts))
-    et = zip(ends, ["r"] * len(ends))
-    pt = zip(points, ["p"] * len(points), range(len(points)))
+    full = [(p, 1) for p in points]
+    full.extend([(s, 0) for s in starts])
+    full.extend([(e, 2) for e in ends])
 
-    result = chain(st, et, pt)
-    result = sorted(result, key=lambda a: (a[0], a[1]))
+    full.sort()
 
-    count = 0
-    for num, letter, index in result:
-        if letter == 'p':
-            count += 1
-        elif letter == 'r':
-            count -= 1
+    num_open_segments = 0
+    i = 0
+
+    for val, p_type in full:
+        if p_type == 0:
+            num_open_segments += 1
+        elif p_type == 2:
+            num_open_segments -= 1
         else:
-            cnt[index] = count
+            cnt[points_num[i]] = num_open_segments
+            i += 1
 
     return cnt
 
@@ -33,9 +34,10 @@ if __name__ == '__main__':
     n = data[0]
     m = data[1]
 
-    starts = data[2:2 * n + 1:2]
+    starts = data[2:2 * n + 2:2]
     ends = data[3:2 * n + 2:2]
     points = data[2 * n + 2:]
 
-    for x in count_segments(starts, ends, points):
+    cnt = count_segments(starts, ends, points)
+    for x in cnt:
         print(x, end=' ')
